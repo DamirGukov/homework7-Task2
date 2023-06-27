@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+	c := make(chan int)
 	c2 := make(chan int)
 	c3 := make(chan int)
 	arr := make([]int, 0, 3)
@@ -14,19 +15,24 @@ func main() {
 	rand.Seed(time.Now().UnixNano())
 
 	go func() {
-		for i := 0; i < 3; i++ {
+		for i := 0; i <= 3; i++ {
 			n := rand.Intn(100)
 			fmt.Println("Random number:", n)
-			arr = append(arr, n)
+			c <- n
 		}
+		close(c)
+		
 		answerMax := <-c2
 		fmt.Println("Max number:", answerMax)
 		answerMin := <-c3
 		fmt.Println("Min number:", answerMin)
 
 	}()
-
 	time.Sleep(time.Second)
+
+	for num := range c {
+		arr = append(arr, num)
+	}
 
 	go func() {
 		max := arr[0]
@@ -39,10 +45,11 @@ func main() {
 				min = element
 			}
 		}
+
 		c2 <- max
 		c3 <- min
-
 	}()
 
 	time.Sleep(time.Second)
 }
+
