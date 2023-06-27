@@ -30,11 +30,10 @@ func main() {
 	}()
 	time.Sleep(time.Second)
 
-	for num := range c {
+	go func() {
+		for num := range c {
 		arr = append(arr, num)
 	}
-
-	go func() {
 		max := arr[0]
 		min := arr[0]
 		for _, element := range arr {
