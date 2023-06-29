@@ -35,13 +35,13 @@ func main() {
 	time.Sleep(time.Second)
 
 	go func() {
-		maxMin := minMax{
-			min: 101,
-			max: 0,
-		}
-
 		for num := range c {
 			arr = append(arr, num)
+		}
+
+		maxMin := minMax{
+			min: arr[0],
+			max: arr[0],
 		}
 
 		for _, element := range arr {
